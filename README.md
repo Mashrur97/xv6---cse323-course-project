@@ -90,9 +90,8 @@ Process Creation Time (ctime): Tracks when each process is created.
 
 State Names: RUNNING, SLEEP, RUNNABLE, UNUSED, etc.
 
-👤 Contributors
 
-## Contributors
+## 👤 Contributors
 
 - Mashrur Fardin - implemented meminfo
 - SM Tazbid Siddiqui - implemented priority scheduling
