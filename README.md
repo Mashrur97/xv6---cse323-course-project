@@ -38,7 +38,7 @@ Displays information about all processes:
 - Change the priority of a process at runtime.  
 - **Example:**  
 
-priority 9 1
+  priority 9 1
 
 Sets process with PID 9 to priority 1.
 
@@ -49,7 +49,7 @@ Spawns multiple child processes to simulate CPU load.
 Used to test scheduling and priority behavior.
 
 dpro &
-
+```text
 🗂 File Structure
 xv6-public/
 ├── user/
@@ -64,7 +64,7 @@ xv6-public/
 │   └── ... (kernel source files)
 ├── Makefile
 └── README.md
-
+```
 🚀 Installation and Running
 
 Clone the repository
@@ -92,5 +92,8 @@ State Names: RUNNING, SLEEP, RUNNABLE, UNUSED, etc.
 
 👤 Contributors
 
-Mashrur Fardin – Implemented meminfo
-SM Tazbid Siddiqui - Implemented priority scheduling
+## Contributors
+
+- Mashrur Fardin - implemented meminfo
+- SM Tazbid Siddiqui - implemented priority scheduling
+
