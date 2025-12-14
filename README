@@ -1,51 +1,87 @@
-NOTE: we have stopped maintaining the x86 version of xv6, and switched
-our efforts to the RISC-V version
-(https://github.com/mit-pdos/xv6-riscv.git)
+This repository contains a modified version of xv6, the educational Unix-like operating system, customized for the CSE323 Operating Systems course project.
 
-xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
-Version 6 (v6).  xv6 loosely follows the structure and style of v6,
-but is implemented for a modern x86-based multiprocessor using ANSI C.
+Overview
 
-ACKNOWLEDGMENTS
+This project demonstrates process management, scheduling, and system call enhancements in xv6. The following features were added or modified:
 
-xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
-to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
-2000)). See also https://pdos.csail.mit.edu/6.828/, which
-provides pointers to on-line resources for v6.
+Added Features
 
-xv6 borrows code from the following sources:
-    JOS (asm.h, elf.h, mmu.h, bootasm.S, ide.c, console.c, and others)
-    Plan 9 (entryother.S, mp.h, mp.c, lapic.c)
-    FreeBSD (ioapic.c)
-    NetBSD (console.c)
+meminfo system call
 
-The following people have made contributions: Russ Cox (context switching,
-locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, and Austin
-Clements.
+Prints a table of all processes with the following columns:
 
-We are also grateful for the bug reports and patches contributed by Silas
-Boyd-Wickizer, Anton Burtsev, Cody Cutler, Mike CAT, Tej Chajed, eyalz800,
-Nelson Elhage, Saar Ettinger, Alice Ferrazzi, Nathaniel Filardo, Peter
-Froehlich, Yakir Goaron,Shivam Handa, Bryan Henry, Jim Huang, Alexander
-Kapshuk, Anders Kaseorg, kehao95, Wolfgang Keller, Eddie Kohler, Austin
-Liew, Imbar Marinescu, Yandong Mao, Matan Shabtay, Hitoshi Mitake, Carmi
-Merimovich, Mark Morrissey, mtasm, Joel Nider, Greg Price, Ayan Shafqat,
-Eldar Sehayek, Yongming Shen, Cam Tenny, tyfkda, Rafael Ubal, Warren
-Toomey, Stephen Tu, Pablo Ventura, Xi Wang, Keiichi Watanabe, Nicolas
-Wolovick, wxdao, Grant Wu, Jindong Zhang, Icenowy Zheng, and Zou Chang Wei.
+PID – Process ID
 
-The code in the files that constitute xv6 is
-Copyright 2006-2018 Frans Kaashoek, Robert Morris, and Russ Cox.
+NAME – Process name
 
-ERROR REPORTS
+MEMORY(bytes) – Size of the process memory
 
-We don't process error reports (see note on top of this file).
+CREATED(ticks) – Tick count when the process was created
 
-BUILDING AND RUNNING XV6
+STATE – Current state of the process (RUNNABLE, SLEEPING, RUNNING, etc.)
 
-To build xv6 on an x86 ELF machine (like Linux or FreeBSD), run
-"make". On non-x86 or non-ELF machines (like OS X, even on x86), you
-will need to install a cross-compiler gcc suite capable of producing
-x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).
-Then run "make TOOLPREFIX=i386-jos-elf-". Now install the QEMU PC
-simulator and run "make qemu".
+PRIORITY – Current priority of the process
+
+Ensures neat alignment using spaces for readability.
+
+Priority-Based Scheduling
+
+Implemented priority-based round-robin CPU scheduling in proc.c.
+
+Processes are assigned a priority value at creation (default = 2).
+
+Scheduler selects the highest priority runnable process to run next.
+
+Integrates with xv6’s original round-robin mechanism to avoid starvation.
+
+Dynamic Process Priority Adjustment
+
+priority <pid> <new_priority> command lets you modify the priority of any process.
+
+Works in conjunction with the scheduler to demonstrate dynamic behavior.
+
+Demo Programs
+
+dpro – Fork-intensive program to test CPU scheduling.
+
+Other standard xv6 user programs (sh, ls, echo, etc.) included for reference.
+
+Repository Structure
+xv6-public/
+├── README.md             # This file
+├── Makefile
+├── proc.c                # Modified scheduler and meminfo
+├── sysproc.c             # meminfo syscall
+├── user/                 # User programs including meminfo, dpro, priority
+├── ...                   # Original xv6 files
+
+How to Build & Run
+make clean
+make
+make qemu
+
+
+Launch xv6 in QEMU.
+
+Use the shell to run commands like meminfo, dpro, or priority.
+
+Example Usage
+$ meminfo
+PID   NAME     MEMORY(bytes)  CREATED(ticks)  STATE      PRIORITY
+1     init     12288          0               SLEEP      2
+2     sh       16384          2               SLEEP      2
+3     meminfo  12288          950             RUNNING    2
+
+$ dpro &; dpro &;
+
+$ priority 3 5
+
+$ meminfo
+PID   NAME     MEMORY(bytes)  CREATED(ticks)  STATE      PRIORITY
+...
+
+Notes
+
+The ticks column is based on the hardware timer interrupts, incremented approximately 100 times per second in the emulated environment.
+
+This version of xv6 is primarily for educational purposes and demonstrates process scheduling, system calls, and basic OS concepts.
